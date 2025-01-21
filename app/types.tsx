@@ -27,6 +27,10 @@ export interface PostWithProfile {
     image: string;
   };
 }
+export interface UploadError {
+  type: string;
+  message: string;
+}
 export interface PostMainLikesCompTypes {
   post: PostWithProfile;
 }
