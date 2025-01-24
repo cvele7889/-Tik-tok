@@ -1,5 +1,4 @@
 import { database, Query } from "@/libs/AppWriteClient";
-import { profile } from "console";
 const useGetRandomUsers = async () => {
   try {
     const profileResult = await database.listDocuments(

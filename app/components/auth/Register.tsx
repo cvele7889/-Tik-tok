@@ -4,8 +4,10 @@ import { useState } from "react";
 import TextInput from "../TextInput";
 import { BiLoaderCircle } from "react-icons/bi";
 import { useUser } from "@/app/context/user";
+import { useGeneralStore } from "@/app/stores/general";
 
 export default function Register() {
+  let { setIsLoginOpen } = useGeneralStore();
   const contextUser = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,7 +58,7 @@ export default function Register() {
       setLoading(true);
       await contextUser.register(name, email, password);
       setLoading(false);
-      // setIsLoginOpen(false);
+      setIsLoginOpen(false);
       router.refresh();
     } catch (error) {
       console.log(error);

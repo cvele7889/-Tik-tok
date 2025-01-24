@@ -11,6 +11,13 @@ export interface User {
   bio: string;
   image: string;
 }
+export interface Profile {
+  id: string;
+  user_id: string;
+  name: string;
+  bio: string;
+  image: string;
+}
 export interface RandomUsers {
   id: string;
   name: string;

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, devtools, createJSONStorage } from "zustand/middleware";
 import { RandomUsers } from "../types";
-import useGetRandomUsers from "../hooks/useGetrRandomUsers";
+import useGetRandomUsers from "../hooks/useGetRandomUsers";
 interface GeneralStore {
   isLoginOpen: boolean;
   isEditProfileOpen: boolean;
