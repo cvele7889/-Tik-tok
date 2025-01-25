@@ -84,7 +84,11 @@ export interface PostMainLikesCompTypes {
   post: PostWithProfile;
 }
 export interface PostPageTypes {
-  params: { userId: string; postId: string };
+  params: {
+    [x: string]: any;
+    userId: string;
+    postId: string;
+  };
 }
 export interface PostUserCompTypes {
   post: Post;
@@ -104,7 +108,10 @@ export interface PostMainCompTypes {
   post: PostWithProfile;
 }
 export interface ProfilePageTypes {
-  params: { id: string };
+  params: {
+    [x: string]: any;
+    id: string;
+  };
 }
 export interface MenuItemsTypes {
   iconString: string;

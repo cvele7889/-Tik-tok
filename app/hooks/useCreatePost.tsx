@@ -10,7 +10,7 @@ const useCreatePost = async (file: File, userId: string, caption: string) => {
         user_id: userId,
         text: caption,
         video_url: videoId,
-        created_at: new Date().toISOString,
+        created_at: new Date().toISOString(),
       }
     );
     await storage.createFile(

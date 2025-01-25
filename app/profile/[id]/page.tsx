@@ -1,32 +1,56 @@
 "use client";
-
+import { SetStateAction, useEffect, useState } from "react";
 import ClientOnly from "@/app/components/ClientOnly";
-import EditProfileOverlay from "@/app/components/Profile/EditProfileOverlay";
 import PostUser from "@/app/components/Profile/PostUser";
+import { useUser } from "@/app/context/user";
+import useCreateBucketUrl from "@/app/hooks/useCreateBucketUrl";
 import MainLayout from "@/app/layouts/MainLayout";
+import { useGeneralStore } from "@/app/stores/general";
+import { usePostStore } from "@/app/stores/post";
+import { useProfileStore } from "@/app/stores/profile";
 import { ProfilePageTypes } from "@/app/types";
 import { BsPencil } from "react-icons/bs";
 
 export default function Profile({ params }: ProfilePageTypes) {
-  const currentProfile = {
-    id: "123",
-    user_id: "123",
-    name: "M C",
-    image: "https://placehold.co/200",
-    bio: "this is bio",
-  };
+  const contextUser = useUser();
+  let { postsByUser, setPostsByUser } = usePostStore();
+  let { setCurrentProfile, currentProfile } = useProfileStore();
+  let { isEditProfileOpen, setIsEditProfileOpen } = useGeneralStore();
+
+  // Local state to store the unwrapped params
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Unwrap `params` and set the `id` in the local state
+    if (params) {
+      const resolvedParams = params; // params is a Promise now
+      resolvedParams.then((resolved: { id: SetStateAction<string | null> }) => {
+        setUserId(resolved.id);
+      });
+    }
+  }, [params]);
+
+  useEffect(() => {
+    // Fetch profile and posts based on `userId`
+    if (userId) {
+      setCurrentProfile(userId);
+      setPostsByUser(userId);
+    }
+  }, [userId, setCurrentProfile, setPostsByUser]);
+
+  if (!userId) {
+    return <div>Loading...</div>; // Wait until `userId` is set
+  }
+
   return (
     <>
       <MainLayout>
-        <ClientOnly>
-          <EditProfileOverlay />
-        </ClientOnly>
         <div className="pt-[90px] ml-[90px] 2xl:pl-[185px] lg:pl-[160px] lg:pr-0 w-[calc(100%-90px)] pr-3 max-w-[1800px] 2xl:mx-auto">
           <div className="flex w-[calc(100vw-230px)]">
             <ClientOnly>
-              {true ? (
+              {currentProfile ? (
                 <img
-                  src={currentProfile.image}
+                  src={useCreateBucketUrl(currentProfile?.image)}
                   className="w-[120px] min-w-[120px] rounded-full"
                 />
               ) : (
@@ -37,7 +61,6 @@ export default function Profile({ params }: ProfilePageTypes) {
               <ClientOnly>
                 {currentProfile?.name ? (
                   <div>
-                    {" "}
                     <p className="text-[30px] font-bold truncate">
                       {currentProfile?.name}
                     </p>
@@ -49,8 +72,15 @@ export default function Profile({ params }: ProfilePageTypes) {
                   <div className="h-[60px]"></div>
                 )}
               </ClientOnly>
-              {true ? (
-                <button className="flex items-center rounded-md py-1.5 px-3.5 mt-3 text-[15px] font-semibold  border hover:bg-gray-100">
+              {contextUser?.user?.id == userId ? (
+                <button
+                  onClick={() =>
+                    setIsEditProfileOpen(
+                      (isEditProfileOpen = !isEditProfileOpen)
+                    )
+                  }
+                  className="flex items-center rounded-md py-1.5 px-3.5 mt-3 text-[15px] font-semibold  border hover:bg-gray-100"
+                >
                   <BsPencil className="mt-0.5 mr-1" size="18" />
                   <span>Edit profile</span>
                 </button>
@@ -90,15 +120,9 @@ export default function Profile({ params }: ProfilePageTypes) {
           </ul>
           <ClientOnly>
             <div className="mt-4 grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
-              <PostUser
-                post={{
-                  id: "123",
-                  user_id: "456",
-                  video_url: "/sea.mp4",
-                  text: "this is a post",
-                  created_at: "date here",
-                }}
-              />
+              {postsByUser?.map((post, index) => (
+                <PostUser key={index} post={post} />
+              ))}
             </div>
           </ClientOnly>
         </div>

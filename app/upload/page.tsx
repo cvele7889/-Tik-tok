@@ -1,20 +1,25 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UploadError } from "../types";
 import UploadLayout from "../layouts/UploadLayout";
 import { BiLoaderCircle, BiSolidCloudUpload } from "react-icons/bi";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { PiKnifeLight } from "react-icons/pi";
-import { log } from "console";
+import { useUser } from "../context/user";
+import useCreatePost from "../hooks/useCreatePost";
 
 export default function Upload() {
+  const contextUser = useUser();
   const router = useRouter();
   let [fileDisplay, setFileDisplay] = useState<string>("");
   let [caption, setCaption] = useState<string>("");
   let [file, setFile] = useState<File | null>(null);
   let [error, setError] = useState<UploadError | null>(null);
   let [isUploading, setIsUploading] = useState<boolean>(false);
+  useEffect(() => {
+    if (!contextUser?.user) router.push("/");
+  }, [contextUser]);
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -33,8 +38,32 @@ export default function Upload() {
     setFile(null);
     setCaption("");
   };
-  const createNewPost = () => {
-    console.log("createNewPOst");
+  const validate = () => {
+    setError(null);
+    let isError = false;
+    if (!file) {
+      setError({ type: "File", message: "A video is required" });
+      isError = true;
+    } else if (!caption) {
+      setError({ type: "caption", message: "A caption is required" });
+      isError = true;
+    }
+    return isError;
+  };
+  const createNewPost = async () => {
+    let isError = validate();
+    if (isError) return;
+    if (!file || !contextUser?.user) return;
+    setIsUploading(true);
+    try {
+      await useCreatePost(file, contextUser?.user?.id, caption);
+      router.push(`/profile/${contextUser?.user?.id}`);
+      setIsUploading(false);
+    } catch (error) {
+      console.log(error);
+      setIsUploading(false);
+      alert(error);
+    }
   };
   return (
     <>

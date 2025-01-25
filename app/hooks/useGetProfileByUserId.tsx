@@ -9,10 +9,10 @@ const useGetProfileByUserId = async (userId: string) => {
     const document = response.documents;
     return {
       id: document[0]?.$id,
-      user_id: document[0]?.$user_id,
-      name: document[0]?.$name,
-      image: document[0]?.$image,
-      bio: document[0]?.$bio,
+      user_id: document[0]?.user_id,
+      name: document[0]?.name,
+      image: document[0]?.image,
+      bio: document[0]?.bio,
     };
   } catch (error) {
     throw error;

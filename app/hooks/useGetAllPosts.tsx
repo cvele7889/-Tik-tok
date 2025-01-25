@@ -4,7 +4,7 @@ const useGetAllPOsts = async () => {
   try {
     const response = await database.listDocuments(
       String(process.env.NEXT_PUBLIC_DATABASE_ID),
-      String(process.env.NEXT_PUBLIC_COLLECTION_ID_COMMENT),
+      String(process.env.NEXT_PUBLIC_COLLECTION_ID_POST),
       [Query.orderDesc("$id")]
     );
     const documents = response.documents;
