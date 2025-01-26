@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
-// Use React.use() to unwrap params (as it's a Promise in Next.js 13+)
+// Unwrap params using React.use() or .then()
 export default function Post({ params }: PostPageTypes) {
   const [unwrappedParams, setUnwrappedParams] = useState<{
     postId: string;
@@ -26,7 +26,7 @@ export default function Post({ params }: PostPageTypes) {
   const { setCommentsByPost } = useCommentStore();
   const router = useRouter();
 
-  // Unwrap the params using React.use() to handle Promise
+  // Unwrap the params using React.use() or .then()
   useEffect(() => {
     if (params && typeof params.then === "function") {
       params.then((resolvedParams) => {

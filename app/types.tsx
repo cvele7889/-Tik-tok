@@ -84,10 +84,10 @@ export interface PostMainLikesCompTypes {
   post: PostWithProfile;
 }
 export interface PostPageTypes {
-  params: {
+  params: Promise<{
     postId: string;
     userId: string;
-  };
+  }>;
 }
 export interface PostUserCompTypes {
   post: Post;
