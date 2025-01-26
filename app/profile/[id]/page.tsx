@@ -1,6 +1,6 @@
 "use client"; // Ova linija označava da je komponenta klijentska
 
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ClientOnly from "@/app/components/ClientOnly";
 import PostUser from "@/app/components/Profile/PostUser";
 import { useUser } from "@/app/context/user";
@@ -12,7 +12,7 @@ import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
 interface ProfilePageTypes {
-  params: { id: string } | Promise<{ id: string }>; // Uzmimo u obzir da `params` može biti Promise
+  params: { id: string } | Promise<{ id: string }>;
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
@@ -25,15 +25,14 @@ export default function Profile({ params }: ProfilePageTypes) {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Proveravamo da li je `params` Promise, ako jeste, razrešavamo ga
     const resolveParams = async () => {
-      if (params && typeof params.then === "function") {
-        // Ako je `params` Promise, razrešavamo ga
-        const resolved = await params;
-        setUserId(resolved.id); // Postavljamo userId iz resolved params
-      } else {
-        // Ako nije Promise, direktno postavljamo userId
-        setUserId((params as { id: string }).id); // Pristupamo id direktno
+      if (params && params instanceof Promise) {
+        // Ako je `params` Promise, rešavamo ga
+        const resolvedParams = await params;
+        setUserId(resolvedParams.id); // Postavljamo korisnički ID
+      } else if (params && params.id) {
+        // Ako je `params` već objekat, direktno postavljamo ID
+        setUserId(params.id);
       }
     };
 
