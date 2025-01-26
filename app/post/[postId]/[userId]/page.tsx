@@ -15,7 +15,6 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 export default function Post({ params }: PostPageTypes) {
-  // State to hold unwrapped params
   const [unwrappedParams, setUnwrappedParams] = useState<{
     postId: string;
     userId: string;
@@ -26,27 +25,17 @@ export default function Post({ params }: PostPageTypes) {
   const { setCommentsByPost } = useCommentStore();
   const router = useRouter();
 
-  // Use useEffect to unwrap params
   useEffect(() => {
-    if (params) {
-      // Assuming `params` is a Promise
-      params.then(
-        (
-          unwrappedParams: React.SetStateAction<{
-            postId: string;
-            userId: string;
-          } | null>
-        ) => {
-          setUnwrappedParams(unwrappedParams);
-        }
-      );
+    // Ensure params is a Promise, and resolve it
+    if (params && typeof params.then === "function") {
+      params.then((unwrappedParams) => {
+        setUnwrappedParams(unwrappedParams);
+      });
     }
   }, [params]);
 
   useEffect(() => {
     if (unwrappedParams?.postId && unwrappedParams?.userId) {
-      // Check if postId and userId are valid before calling the store actions
-      console.log("Valid params:", unwrappedParams); // Debugging line
       setPostById(unwrappedParams.postId);
       setCommentsByPost(unwrappedParams.postId);
       setLikesByPost(unwrappedParams.postId);
@@ -60,11 +49,10 @@ export default function Post({ params }: PostPageTypes) {
     setPostsByUser,
   ]);
 
-  // Loop through posts and navigate to the next post
   const loopTroughPostUp = () => {
     if (!unwrappedParams?.postId || !unwrappedParams?.userId) {
       console.error("Missing postId or userId for navigation");
-      return; // Prevent navigation if params are invalid
+      return;
     }
 
     postsByUser.forEach((post) => {
@@ -74,11 +62,10 @@ export default function Post({ params }: PostPageTypes) {
     });
   };
 
-  // Loop through posts and navigate to the previous post
   const loopTroughPostDown = () => {
     if (!unwrappedParams?.postId || !unwrappedParams?.userId) {
       console.error("Missing postId or userId for navigation");
-      return; // Prevent navigation if params are invalid
+      return;
     }
 
     postsByUser.forEach((post) => {
@@ -88,7 +75,6 @@ export default function Post({ params }: PostPageTypes) {
     });
   };
 
-  // Log params to see what values are coming in (debugging line)
   console.log("unwrappedParams:", unwrappedParams);
 
   return (
