@@ -26,11 +26,18 @@ export default function Profile({ params }: ProfilePageTypes) {
 
   useEffect(() => {
     if (params) {
-      // Resolving params directly since it might be a Promise
-      (async () => {
-        const resolvedParams = await params; // Razrešavamo params Promise
-        setUserId(resolvedParams.id); // Postavljanje userId iz resolved params
-      })();
+      // Proveravamo da li je `params` Promise
+      const resolveParams = async () => {
+        if (params && typeof params.then === "function") {
+          // Ako je `params` Promise, razreši ga
+          const resolved = await params;
+          setUserId(resolved.id); // Postavljanje userId iz resolved params
+        } else {
+          // Ako nije Promise, direktno postavimo userId
+          setUserId(params.id);
+        }
+      };
+      resolveParams();
     }
   }, [params]);
 
