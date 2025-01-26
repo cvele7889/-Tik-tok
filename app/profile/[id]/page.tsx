@@ -11,9 +11,8 @@ import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
-// Tip za parametre koji se prosleđuju u komponentu
 interface ProfilePageTypes {
-  params: { id: string };
+  params: { id: string }; // Tip za params
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
@@ -26,17 +25,16 @@ export default function Profile({ params }: ProfilePageTypes) {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Upotreba use hook-a da bismo obradili params
     if (params) {
-      const resolvedParams = params; // params je sada Promise
-      resolvedParams.then((resolved: { id: string }) => {
-        setUserId(resolved.id); // Postavi userId
-      });
+      // Resolving params directly since it might be a Promise
+      (async () => {
+        const resolvedParams = await params; // Razrešavamo params Promise
+        setUserId(resolvedParams.id); // Postavljanje userId iz resolved params
+      })();
     }
   }, [params]);
 
   useEffect(() => {
-    // Fetch profil i postove na osnovu `userId`
     if (userId) {
       setCurrentProfile(userId);
       setPostsByUser(userId);
