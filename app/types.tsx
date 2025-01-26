@@ -85,8 +85,8 @@ export interface PostMainLikesCompTypes {
 }
 export interface PostPageTypes {
   params: {
-    userId: string;
     postId: string;
+    userId: string;
   };
 }
 export interface PostUserCompTypes {

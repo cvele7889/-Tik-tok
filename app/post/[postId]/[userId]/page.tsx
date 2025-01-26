@@ -7,13 +7,14 @@ import useCreateBucketUrl from "@/app/hooks/useCreateBucketUrl";
 import { useCommentStore } from "@/app/stores/comment";
 import { useLikeStore } from "@/app/stores/like";
 import { usePostStore } from "@/app/stores/post";
-import { PostPageTypes } from "@/app/types";
+import { PostPageTypes } from "@/app/types"; // Correct type
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
+// Use React.use() to unwrap params (new Next.js behavior)
 export default function Post({ params }: PostPageTypes) {
   const [unwrappedParams, setUnwrappedParams] = useState<{
     postId: string;
@@ -26,10 +27,10 @@ export default function Post({ params }: PostPageTypes) {
   const router = useRouter();
 
   useEffect(() => {
-    // Ensure params is a Promise, and resolve it
+    // Use React.use() to unwrap params, which is now a Promise
     if (params && typeof params.then === "function") {
-      params.then((unwrappedParams) => {
-        setUnwrappedParams(unwrappedParams);
+      params.then((resolvedParams) => {
+        setUnwrappedParams(resolvedParams);
       });
     }
   }, [params]);
