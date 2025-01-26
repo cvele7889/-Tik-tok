@@ -11,8 +11,9 @@ import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
+// Ovaj tip sada označava da je params Promise
 interface ProfilePageTypes {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }> | { id: string };
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
