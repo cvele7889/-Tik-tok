@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@types/debounce": "^1.2.4",
-    "appwrite": "^16.1.0",
+    "appwrite": "^13.0.2",
     "canvas": "^3.0.1",
     "debounce": "^2.2.0",
     "image-js": "^0.36.0",
