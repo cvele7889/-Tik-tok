@@ -1,4 +1,5 @@
-"use client";
+"use client"; // Ova linija označava da je komponenta klijentska
+
 import { SetStateAction, useEffect, useState } from "react";
 import ClientOnly from "@/app/components/ClientOnly";
 import PostUser from "@/app/components/Profile/PostUser";
@@ -8,8 +9,12 @@ import MainLayout from "@/app/layouts/MainLayout";
 import { useGeneralStore } from "@/app/stores/general";
 import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
-import { ProfilePageTypes } from "@/app/types";
 import { BsPencil } from "react-icons/bs";
+
+// Tip za parametre koji se prosleđuju u komponentu
+interface ProfilePageTypes {
+  params: { id: string };
+}
 
 export default function Profile({ params }: ProfilePageTypes) {
   const contextUser = useUser();
@@ -17,21 +22,21 @@ export default function Profile({ params }: ProfilePageTypes) {
   let { setCurrentProfile, currentProfile } = useProfileStore();
   let { isEditProfileOpen, setIsEditProfileOpen } = useGeneralStore();
 
-  // Local state to store the unwrapped params
+  // Lokalni state za korisnički ID
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Unwrap `params` and set the `id` in the local state
+    // Upotreba use hook-a da bismo obradili params
     if (params) {
-      const resolvedParams = params; // params is a Promise now
-      resolvedParams.then((resolved: { id: SetStateAction<string | null> }) => {
-        setUserId(resolved.id);
+      const resolvedParams = params; // params je sada Promise
+      resolvedParams.then((resolved: { id: string }) => {
+        setUserId(resolved.id); // Postavi userId
       });
     }
   }, [params]);
 
   useEffect(() => {
-    // Fetch profile and posts based on `userId`
+    // Fetch profil i postove na osnovu `userId`
     if (userId) {
       setCurrentProfile(userId);
       setPostsByUser(userId);
@@ -39,7 +44,7 @@ export default function Profile({ params }: ProfilePageTypes) {
   }, [userId, setCurrentProfile, setPostsByUser]);
 
   if (!userId) {
-    return <div>Loading...</div>; // Wait until `userId` is set
+    return <div>Loading...</div>; // Čekaj dok se `userId` postavi
   }
 
   return (
