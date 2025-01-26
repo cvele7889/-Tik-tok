@@ -107,11 +107,11 @@ export interface PostMainCompTypes {
   post: PostWithProfile;
 }
 export interface ProfilePageTypes {
-  params: {
-    [x: string]: any;
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
+
 export interface MenuItemsTypes {
   iconString: string;
   colorString: string;
