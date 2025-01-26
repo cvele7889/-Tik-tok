@@ -11,9 +11,9 @@ import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
-// ProfilePageTypes sada očekuje da params bude Promise ili { id: string }
+// Definisanje ProfilePageTypes sa params kao Promise
 interface ProfilePageTypes {
-  params: Promise<{ id: string }> | { id: string };
+  params: Promise<{ id: string }> | undefined;
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
@@ -26,28 +26,31 @@ export default function Profile({ params }: ProfilePageTypes) {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Pravimo asinhroni kod koji razrešava `params` ako je Promise
     const resolveParams = async () => {
-      if (params instanceof Promise) {
-        const resolvedParams = await params; // Čekaj da se `params` razreši
-        setUserId(resolvedParams.id); // Postavi `id`
-      } else if (params && params.id) {
-        setUserId(params.id); // Ako `params` nije Promise, koristi direktno
+      if (params) {
+        if (params instanceof Promise) {
+          // Ako je params Promise, razrešite ga
+          const resolvedParams = await params;
+          setUserId(resolvedParams.id); // Postavite ID
+        } else {
+          // Ako params nije Promise, koristite direktno
+          setUserId(params.id);
+        }
       }
     };
 
-    resolveParams(); // Pozivanje funkcije za razrešenje params
+    resolveParams(); // Pozivanje asinhrone funkcije
   }, [params]);
 
   useEffect(() => {
     if (userId) {
-      setCurrentProfile(userId); // Postavi trenutni profil
-      setPostsByUser(userId); // Postavi postove za korisnika
+      setCurrentProfile(userId); // Postavite trenutni profil
+      setPostsByUser(userId); // Postavite postove za korisnika
     }
   }, [userId, setCurrentProfile, setPostsByUser]);
 
   if (!userId) {
-    return <div>Loading...</div>; // Čekaj dok se `userId` postavi
+    return <div>Loading...</div>; // Čekajte dok se userId postavi
   }
 
   return (

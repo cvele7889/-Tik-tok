@@ -38,7 +38,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const register = async (name: string, email: string, password: string) => {
     try {
       const promise = await account.create(ID.unique(), email, password, name);
-      await account.createEmailPasswordSession(email, password);
+      await account.createEmailSession(email, password);
       await useCreateProfile(
         promise?.$id,
         name,
@@ -52,7 +52,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
   const login = async (email: string, password: string) => {
     try {
-      await account.createEmailPasswordSession(email, password);
+      await account.createEmailSession(email, password);
       await checkUser();
     } catch (error) {
       throw error;
