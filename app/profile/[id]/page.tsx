@@ -11,7 +11,7 @@ import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
-// Ovaj tip sada označava da je params Promise
+// Tip koji označava da `params` može biti Promise
 interface ProfilePageTypes {
   params: Promise<{ id: string }> | { id: string };
 }
@@ -26,13 +26,14 @@ export default function Profile({ params }: ProfilePageTypes) {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Funkcija koja rešava `params` ako je `Promise`
     const resolveParams = async () => {
-      if (params && params instanceof Promise) {
-        // Ako je `params` Promise, rešavamo ga
+      if (params instanceof Promise) {
+        // Ako je `params` Promise, čekamo da se razreši
         const resolvedParams = await params;
         setUserId(resolvedParams.id); // Postavljamo korisnički ID
       } else if (params && params.id) {
-        // Ako je `params` već objekat, direktno postavljamo ID
+        // Ako `params` već sadrži ID, koristimo ga direktno
         setUserId(params.id);
       }
     };
