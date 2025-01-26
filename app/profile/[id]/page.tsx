@@ -11,9 +11,9 @@ import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
-// Podesite tip za ProfilePageTypes kao da je `params` Promise
+// ProfilePageTypes sada očekuje da params bude Promise ili { id: string }
 interface ProfilePageTypes {
-  params: Promise<{ id: string }> | { id: string }; // Ovaj tip sada odgovara i Promise i običnom objektu
+  params: { id: string } | Promise<{ id: string }>;
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
@@ -26,24 +26,23 @@ export default function Profile({ params }: ProfilePageTypes) {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Pravimo asinhroni kod koji razrešava `params` ako je Promise
     const resolveParams = async () => {
-      // Ako je `params` Promise, čekamo da se razreši
       if (params instanceof Promise) {
-        const resolvedParams = await params; // Razrešavanje Promise-a
-        setUserId(resolvedParams.id); // Postavljamo korisnički ID
+        const resolvedParams = await params; // Čekaj da se `params` razreši
+        setUserId(resolvedParams.id); // Postavi `id`
       } else if (params && params.id) {
-        // Ako `params` već sadrži ID, koristimo ga direktno
-        setUserId(params.id);
+        setUserId(params.id); // Ako `params` nije Promise, koristi direktno
       }
     };
 
-    resolveParams();
+    resolveParams(); // Pozivanje funkcije za razrešenje params
   }, [params]);
 
   useEffect(() => {
     if (userId) {
-      setCurrentProfile(userId);
-      setPostsByUser(userId);
+      setCurrentProfile(userId); // Postavi trenutni profil
+      setPostsByUser(userId); // Postavi postove za korisnika
     }
   }, [userId, setCurrentProfile, setPostsByUser]);
 
