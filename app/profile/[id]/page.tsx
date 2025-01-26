@@ -13,7 +13,7 @@ import { BsPencil } from "react-icons/bs";
 
 // ProfilePageTypes sada očekuje da params bude Promise ili { id: string }
 interface ProfilePageTypes {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }> | { id: string };
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
