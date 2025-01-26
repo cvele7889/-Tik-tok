@@ -12,7 +12,7 @@ import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
 interface ProfilePageTypes {
-  params: { id: string }; // Tip za params
+  params: { id: string } | Promise<{ id: string }>; // Uzmimo u obzir da `params` može biti Promise
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
@@ -25,20 +25,19 @@ export default function Profile({ params }: ProfilePageTypes) {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (params) {
-      // Proveravamo da li je `params` Promise
-      const resolveParams = async () => {
-        if (params && typeof params.then === "function") {
-          // Ako je `params` Promise, razreši ga
-          const resolved = await params;
-          setUserId(resolved.id); // Postavljanje userId iz resolved params
-        } else {
-          // Ako nije Promise, direktno postavimo userId
-          setUserId(params.id);
-        }
-      };
-      resolveParams();
-    }
+    // Proveravamo da li je `params` Promise, ako jeste, razrešavamo ga
+    const resolveParams = async () => {
+      if (params && typeof params.then === "function") {
+        // Ako je `params` Promise, razrešavamo ga
+        const resolved = await params;
+        setUserId(resolved.id); // Postavljamo userId iz resolved params
+      } else {
+        // Ako nije Promise, direktno postavljamo userId
+        setUserId((params as { id: string }).id); // Pristupamo id direktno
+      }
+    };
+
+    resolveParams();
   }, [params]);
 
   useEffect(() => {
