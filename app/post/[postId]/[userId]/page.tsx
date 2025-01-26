@@ -137,10 +137,12 @@ export default function Post({ params }: PostPageTypes) {
         <div className="py-7" />
         <ClientOnly>
           {postById?.video_url ? (
-            <CommentsHeader post={postById} params={unwrappedParams} />
+            unwrappedParams ? (
+              <CommentsHeader post={postById} params={unwrappedParams} />
+            ) : null
           ) : null}
         </ClientOnly>
-        <Comments params={unwrappedParams} />
+        <Comments params={unwrappedParams || { postId: "", userId: "" }} />
       </div>
     </div>
   );

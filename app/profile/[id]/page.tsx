@@ -11,9 +11,8 @@ import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
-// Definisanje ProfilePageTypes sa params kao Promise
 interface ProfilePageTypes {
-  params: Promise<{ id: string }> | undefined;
+  params: Promise<{ id: string }> | undefined; // Očekujemo da params bude Promise
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
@@ -22,35 +21,28 @@ export default function Profile({ params }: ProfilePageTypes) {
   let { setCurrentProfile, currentProfile } = useProfileStore();
   let { isEditProfileOpen, setIsEditProfileOpen } = useGeneralStore();
 
-  // Lokalni state za korisnički ID
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const resolveParams = async () => {
       if (params) {
-        if (params instanceof Promise) {
-          // Ako je params Promise, razrešite ga
-          const resolvedParams = await params;
-          setUserId(resolvedParams.id); // Postavite ID
-        } else {
-          // Ako params nije Promise, koristite direktno
-          setUserId(params.id);
-        }
+        const resolvedParams = await params; // Razrešavamo Promise
+        setUserId(resolvedParams.id); // Postavljamo ID
       }
     };
 
-    resolveParams(); // Pozivanje asinhrone funkcije
+    resolveParams();
   }, [params]);
 
   useEffect(() => {
     if (userId) {
-      setCurrentProfile(userId); // Postavite trenutni profil
-      setPostsByUser(userId); // Postavite postove za korisnika
+      setCurrentProfile(userId);
+      setPostsByUser(userId);
     }
   }, [userId, setCurrentProfile, setPostsByUser]);
 
   if (!userId) {
-    return <div>Loading...</div>; // Čekajte dok se userId postavi
+    return <div>Loading...</div>;
   }
 
   return (
