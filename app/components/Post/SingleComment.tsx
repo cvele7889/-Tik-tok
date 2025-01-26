@@ -3,6 +3,7 @@ import useCreateBucketUrl from "@/app/hooks/useCreateBucketUrl";
 import useDeleteComment from "@/app/hooks/useDeleteComment";
 import { useCommentStore } from "@/app/stores/comment";
 import { SingleCommentCompTypes } from "@/app/types";
+import moment from "moment";
 import Link from "next/link";
 import { useState } from "react";
 import { BiLoaderCircle } from "react-icons/bi";
@@ -47,7 +48,7 @@ export default function SingleComment({
               <span className="flex items-center">
                 {comment?.profile?.name} -{" "}
                 <span className="text-[12px] text-gray-600 font-light ml-1">
-                  {comment?.created_at}
+                  {moment(comment?.created_at).calendar()}
                 </span>
               </span>
               {contextUser?.user?.id == comment.profile.user_id ? (
