@@ -107,9 +107,7 @@ export interface PostMainCompTypes {
   post: PostWithProfile;
 }
 export interface ProfilePageTypes {
-  params: Promise<{
-    id: string;
-  }>;
+  params: Promise<{ id: string }> | { id: string }; // Očekujemo ili Promise ili objekat sa id
 }
 
 export interface MenuItemsTypes {
