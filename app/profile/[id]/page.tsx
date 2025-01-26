@@ -11,9 +11,9 @@ import { usePostStore } from "@/app/stores/post";
 import { useProfileStore } from "@/app/stores/profile";
 import { BsPencil } from "react-icons/bs";
 
-// Tip za ProfilePageTypes, koji mora da bude Promise sa id
+// Podesite tip za ProfilePageTypes kao da je `params` Promise
 interface ProfilePageTypes {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }> | { id: string }; // Ovaj tip sada odgovara i Promise i običnom objektu
 }
 
 export default function Profile({ params }: ProfilePageTypes) {
