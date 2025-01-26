@@ -85,7 +85,6 @@ export interface PostMainLikesCompTypes {
 }
 export interface PostPageTypes {
   params: {
-    [x: string]: any;
     userId: string;
     postId: string;
   };
