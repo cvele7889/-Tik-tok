@@ -7,15 +7,16 @@ Ovo je klon popularne aplikacije TikTok napravljen korišćenjem modernih web te
 ## 🚀 Tehnologije koje su korišćene
 
 - **React** – Frontend biblioteka za izradu korisničkog interfejsa.
-- **Vite** – Brz alat za build i razvoj React aplikacija.
+- **Next.js** – React framework za izgradnju modernih web aplikacija sa podrškom za server-side rendering i routing.
+- **TypeScript** – Superset JavaScript-a koji omogućava statičku tipizaciju radi bolje stabilnosti i skalabilnosti koda.
 - **Zustand** – Lagana state management biblioteka zasnovana na hookovima.
 - **Appwrite** – Backend kao servis, koristi se za:
   - autentifikaciju korisnika
   - čuvanje postova, komentara, lajkova i profila
   - cloud funkcionalnosti i baze podataka
 - **Tailwind CSS** – CSS framework za brzo stilizovanje korisničkog interfejsa.
-- **React Router** – Navigacija unutar aplikacije.
-- **TikTok-style Video Player** – Custom video plejera koji emulira funkcionalnosti TikTok-a.
+- **React Router** – Navigacija unutar aplikacije _(može biti zamenjen Next.js router-om)_.
+- **TikTok-style Video Player** – Custom video plejer koji emulira funkcionalnosti TikTok-a.
 
 ---
 
@@ -39,6 +40,28 @@ Baza podataka koristi sledeće kolekcije:
 2. `Comment` – čuva komentare povezane sa postovima
 3. `Like` – evidentira koji korisnik je lajkovao koji post
 4. `Profile` – dodatne informacije o korisniku
+
+## ⚙️ Pokretanje aplikacije
+
+1. Kloniraj repozitorijum:
+
+   git clone https://github.com/your-username/tiktok-clone.git
+   cd tiktok-clone
+
+2. Instaliraj zavisnosti:
+
+npm install
+
+3. Popuni .env fajl sa Appwrite konfiguracijom (primer ispod)
+
+4. Pokreni aplikaciju u development modu:
+
+npm run dev
+
+5. Za build produkcijske verzije aplikacije:
+
+npm run build
+npm run start
 
 ## 📸 Screenshotovi aplikacije
 
